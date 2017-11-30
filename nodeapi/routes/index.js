@@ -5,6 +5,20 @@ const { query, validationResult } = require('express-validator/check');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+  
+  const segundo = (new Date()).getSeconds();
+
+  res.locals.valor = '<script>alert("inyección de codigo!")</script>';
+  res.locals.condicion = {
+    segundo: segundo,
+    estado: segundo % 2 === 0
+  };
+  res.locals.users = [
+    { name: 'Smith', age: 22 },
+    { name: 'Thomas', age: 32 },
+    { name: 'Jones', age: 27 }
+  ];
+
   res.render('index', { title: 'Express' });
 });
 
