@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
+const { query, validationResult } = require('express-validator/check');
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
@@ -21,6 +23,22 @@ router.get('/paramenrutaopcional/:dato?', function(req, res, next) {
 router.get('/param/:id([0-9]+)/piso/:piso/puerta/:puerta', (req, res, next) => {
   console.log('req.params', req.params);
   res.send('ok recibido:' + req.params.id);
+});
+
+// Recibiendo parámetros en query-string
+router.get('/paramenquery', [
+  query('age').isNumeric().withMessage('must be numeric')
+], (req, res, next) => {
+  console.log('req.query', req.query);
+  validationResult(req).throw();
+  // los parámetros siempre son string
+  res.send('ok');
+});
+
+// Recibiendo parámetros en el body
+router.put('/enelbody', (req, res, next) => {
+  console.log('req.body', req.body);
+  res.send('ok');
 });
 
 module.exports = router;
