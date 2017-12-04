@@ -29,3 +29,5 @@ conexion.query('SELECT * FROM agentes', (err, rows, fields) => {
   conexion.end();
 
 });
+
+// si cerramos la conexión aqui, aunque no es correcto, funcionará porque el driver de MySQL nos lo arregla

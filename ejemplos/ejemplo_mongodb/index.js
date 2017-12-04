@@ -11,6 +11,6 @@ MongoClient.connect('mongodb://localhost/cursonode', (err, db) => {
       process.exit(1);
     }
     console.log(docs);
-    db.close();      
+    db.close();
   });
 });
