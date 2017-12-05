@@ -12,8 +12,25 @@ const Agente = require('../../models/Agente');
  */
 router.get('/', async (req, res, next) => {
   try {
+    const name = req.query.name;
+    const age = req.query.age;
+    const limit = parseInt(req.query.limit); // Number(str)
+    const skip = parseInt(req.query.skip);
+    const sort = req.query.sort;
+    const fields = req.query.fields;
+
+    // creo el filtro vacio
     const filter = {};
-    const rows = await Agente.find(filter).exec();
+
+    if (name) {
+      filter.name = name;
+    }
+
+    if (age) {
+      filter.age = age;
+    }
+
+    const rows = await Agente.list(filter, limit, skip, sort, fields);
     res.json({ success: true, result: rows });
   } catch(err) {
     next(err);
