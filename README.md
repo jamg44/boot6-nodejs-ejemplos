@@ -3,3 +3,7 @@
 ## Para arrancar MongoDB podemos usar
 
 ./bin/mongod --dbpath ./data/db --directoryperdb
+
+## Para ejecutar el proyecto en modo desarrollo
+
+npm run dev
