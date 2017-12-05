@@ -2,9 +2,26 @@
 
 const express = require('express');
 const router = express.Router();
+const basic = require('basic-auth');
+
 
 // cargar el modelo de Agente
 const Agente = require('../../models/Agente');
+
+router.use((req, res, next) => {
+  const user = basic(req);
+
+  // buscar en la base de datos el usuario user.name
+  // y comprobar la password
+
+  if (!user || user.name !== 'admin' || user.pass !== '1234') {
+    // responder que necesito credenciales
+    res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
+    res.sendStatus(401);
+    return;
+  }
+  next();
+});
 
 /**
  * GET /agentes
