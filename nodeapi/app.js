@@ -37,6 +37,7 @@ app.use('/',      require('./routes/index'));
 app.use('/users', require('./routes/users'));
 
 // Rutas del APIv1
+app.use('/apiv1/authenticate', require('./routes/apiv1/authenticate'));
 app.use('/apiv1/agentes', require('./routes/apiv1/agentes'));
 
 // catch 404 and forward to error handler
@@ -52,16 +53,27 @@ app.use(function(err, req, res, next) {
   if (err.array) { // es un error de express-validator
     err.status = 422;
     const errInfo = err.array({ onlyFirstError: true })[0];
-    err.message = `Not valid - ${errInfo.param} ${errInfo.msg}`;
+    err.message = isAPI(req) ? 
+      { message: 'Not valid', errors: err.mapped()} : // para peticones de API
+      `Not valid - ${errInfo.param} ${errInfo.msg}`;  // para otras peticiones
   }
 
+  res.status(err.status || 500);
+  
+  if (isAPI(req)) { // si es un API devuelvo JSON
+    res.json({ success: false, error: err.message });
+    return;
+  }
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
-  res.status(err.status || 500);
   res.render('error');
 });
+
+function isAPI(req) {
+  return req.originalUrl.indexOf('/apiv') === 0;
+}
 
 module.exports = app;

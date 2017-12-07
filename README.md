@@ -4,6 +4,10 @@
 
 ./bin/mongod --dbpath ./data/db --directoryperdb
 
+## Desplegue
+
+Copiar .env.example a .env y revisar los valores
+
 ## Para ejecutar el proyecto en modo desarrollo
 
 npm run dev

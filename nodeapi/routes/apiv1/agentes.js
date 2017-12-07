@@ -2,26 +2,18 @@
 
 const express = require('express');
 const router = express.Router();
-const basic = require('basic-auth');
-
+const basicAuth = require('../../lib/basicAuth');
+const jwtAuth = require('../../lib/jwtAuth');
 
 // cargar el modelo de Agente
 const Agente = require('../../models/Agente');
 
-router.use((req, res, next) => {
-  const user = basic(req);
+// si quiero que afecte a todo el router
+//router.use(basicAuth(
+//  process.env.BASIC_AUTH_USER, 
+//  process.env.BASIC_AUTH_PASSWORD));
 
-  // buscar en la base de datos el usuario user.name
-  // y comprobar la password
-
-  if (!user || user.name !== 'admin' || user.pass !== '1234') {
-    // responder que necesito credenciales
-    res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
-    res.sendStatus(401);
-    return;
-  }
-  next();
-});
+router.use(jwtAuth());
 
 /**
  * GET /agentes
